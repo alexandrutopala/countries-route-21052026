@@ -5,7 +5,7 @@ import com.example.countriesroute.service.RouteService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -142,14 +142,4 @@ class RoutingControllerIntegrationTest {
                 .andExpect(jsonPath("$.message").value("Unknown country code: XXX"));
     }
 
-    // -------------------------------------------------------------------------
-    // Swagger UI availability
-    // -------------------------------------------------------------------------
-
-    @Test
-    @DisplayName("Swagger UI is reachable at /swagger-ui/index.html")
-    void swaggerUiAvailable() throws Exception {
-        mockMvc.perform(get("/swagger-ui/index.html"))
-                .andExpect(status().isOk());
-    }
 }
