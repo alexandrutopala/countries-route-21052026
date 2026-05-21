@@ -2,46 +2,46 @@
 
 A Spring Boot REST service that calculates the shortest land route between two countries using BFS over a border-adjacency graph loaded from public country data.
 
-## Prerequisites
+## Running the application
 
-- Java 25+
-- Maven 3.9+ (or use the included `./mvnw` wrapper — no local Maven install required)
-- Docker (optional, for containerised deployment)
+### Option 1 — Published Docker image
 
-## Build
+**Prerequisites:** Docker
 
 ```bash
-./mvnw package
+docker run -p 8080:8080 --name contries-route -d --rm alexandrutopala/countries-route:latest
 ```
 
-The fat JAR is produced at `target/countries-route-0.0.1-SNAPSHOT.jar`.
+### Option 2 — Local build
 
-To also run the test suite:
+**Prerequisites:** Java 25+, Git (the `./mvnw` wrapper handles Maven — no local install required)
 
 ```bash
-./mvnw verify
+./mvnw package -DskipTests && java -jar target/countries-route-0.0.1-SNAPSHOT.jar
 ```
 
-## Run
+---
+
+The service starts on port `8080` and fetches country data from GitHub on startup. An internet connection is required.
+
+## Sample request
 
 ```bash
-java -jar target/countries-route-0.0.1-SNAPSHOT.jar
+curl http://localhost:8080/routing/CZE/ITA
 ```
 
-The service starts on port `8080` and fetches country data from GitHub on startup. An internet connection is required on first boot.
-
-## Docker
-
-Build the image:
-
-```bash
-docker build -t countries-route .
+```json
+{
+  "route": ["CZE", "AUT", "ITA"]
+}
 ```
 
-Run the container:
+## Clean up
+
+Stop the Docker container, if used
 
 ```bash
-docker run -p 8080:8080 countries-route
+docker stop contries-route
 ```
 
 ## API
@@ -71,12 +71,6 @@ GET /routing/{origin}/{destination}
 {
   "message": "No land route found between AUS and ESP"
 }
-```
-
-### Sample request
-
-```bash
-curl http://localhost:8080/routing/CZE/ITA
 ```
 
 ## API Documentation
