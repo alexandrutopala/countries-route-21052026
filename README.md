@@ -44,6 +44,36 @@ Stop the Docker container, if used
 docker stop contries-route
 ```
 
+## Building the Docker image
+
+### Single platform (native)
+
+```bash
+docker build -t countries-route .
+```
+
+### Targeting aarch64 explicitly (e.g. Apple Silicon or ARM servers)
+
+Requires [Docker Buildx](https://docs.docker.com/buildx/working-with-buildx/), which ships with Docker Desktop by default.
+
+```bash
+docker buildx build --platform linux/arm64 -t countries-route .
+```
+
+The builder stage always runs on your native machine so Maven never executes under emulation — only the final JRE layer targets `linux/arm64`.
+
+### Multi-platform image (amd64 + arm64)
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t countries-route .
+```
+
+To push a multi-platform image directly to a registry, add `--push`:
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t <your-registry>/countries-route:latest --push .
+```
+
 ## API
 
 ### Find land route
