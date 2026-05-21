@@ -23,7 +23,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public List<String> findRoute(String origin, String destination) {
-        Map<String, Set<String>> graph = countryDataLoader.getBorderGraph();
+        var graph = countryDataLoader.getBorderGraph();
 
         if (!graph.containsKey(origin)) {
             throw new RouteNotFoundException("Unknown country code: " + origin);

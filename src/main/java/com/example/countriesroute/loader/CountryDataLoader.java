@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -28,15 +26,8 @@ public class CountryDataLoader {
 
     private Map<String, Set<String>> borderGraph = Collections.emptyMap();
 
-    public CountryDataLoader(@Value("${countries.data.url}") String countriesDataUrl) {
-        MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-        jsonConverter.setSupportedMediaTypes(List.of(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN));
-        this.restClient = RestClient.builder()
-                .messageConverters(converters -> {
-                    converters.removeIf(c -> c instanceof MappingJackson2HttpMessageConverter);
-                    converters.add(jsonConverter);
-                })
-                .build();
+    public CountryDataLoader(@Value("${countries.data.url}") String countriesDataUrl, RestClient restClient) {
+        this.restClient = restClient;
         this.countriesDataUrl = countriesDataUrl;
     }
 
